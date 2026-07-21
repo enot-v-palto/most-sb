@@ -13,7 +13,7 @@ for pkg in ("textual", "source"):
     hiddenimports += h
 
 a = Analysis(
-    ["source/tui.py"],
+    ["_launcher_tui.py"],
     pathex=["."],
     binaries=binaries,
     datas=datas,

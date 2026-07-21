@@ -13,7 +13,7 @@ for pkg in ("source", "soundfile", "argon2_cffi"):
     hiddenimports += h
 
 a = Analysis(
-    ["source/cli.py"],
+    ["_launcher_cli.py"],
     pathex=["."],
     binaries=binaries,
     datas=datas,
