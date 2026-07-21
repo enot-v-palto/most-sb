@@ -1,0 +1,38 @@
+name: Build binaries
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          pip install pyinstaller -r requirements.txt
+
+      - name: Build CLI binary
+        shell: bash
+        run: pyinstaller most-sb-cli.spec
+
+      - name: Build TUI binary
+        shell: bash
+        run: pyinstaller most-sb-tui.spec
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: most-sb-${{ matrix.os }}
+          path: dist/
