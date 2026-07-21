@@ -39,17 +39,18 @@ jobs:
       - name: Package binaries
         shell: bash
         run: |
+          mkdir -p dist/packages
           cd dist
           case "${{ matrix.os }}" in
-            windows-*) 7z a most-sb-${{ matrix.os }}.zip most-sb.exe most-sb-tui.exe ;;
-            *)         tar czf most-sb-${{ matrix.os }}.tar.gz most-sb most-sb-tui ;;
+            windows-*) 7z a packages/most-sb-${{ matrix.os }}.zip most-sb.exe most-sb-tui.exe ;;
+            *)         tar czf packages/most-sb-${{ matrix.os }}.tar.gz most-sb most-sb-tui ;;
           esac
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: binaries-${{ matrix.os }}
-          path: dist/most-sb-*
+          path: dist/packages/
           if-no-files-found: error
 
   release:
