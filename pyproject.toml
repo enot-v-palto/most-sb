@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "most-sb"
+version = "0.1.0"
+description = "LSB стеганография — прячем текст в PNG и WAV/FLAC аудио"
+requires-python = ">=3.11"
+dependencies = [
+    "pillow>=10.0.0",
+    "numpy>=1.24.0",
+    "textual>=0.41.0",
+    "cryptography>=41.0.0",
+    "soundfile>=0.12.0",
+    "argon2-cffi>=23.0.0",
+]
+
+[project.scripts]
+most-sb = "source.cli:main"
+most-sb-tui = "source.tui:main"
+
+[tool.ruff]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["F", "I", "E", "W", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.mypy]
+python_version = "3.14"
+ignore_missing_imports = true
+warn_unused_configs = true
+strict = false
