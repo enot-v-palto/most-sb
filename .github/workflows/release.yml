@@ -1,4 +1,4 @@
-name: Build binaries
+name: Build & Release
 on:
   push:
     tags: ["v*"]
@@ -7,7 +7,10 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -31,8 +34,16 @@ jobs:
         shell: bash
         run: pyinstaller most-sb-tui.spec
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      - name: Package binaries
+        shell: bash
+        run: |
+          cd dist
+          case "${{ matrix.os }}" in
+            windows-*)  7z a most-sb-${{ matrix.os }}.zip most-sb.exe most-sb-tui.exe ;;
+            *)          tar czf most-sb-${{ matrix.os }}.tar.gz most-sb most-sb-tui ;;
+          esac
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
         with:
-          name: most-sb-${{ matrix.os }}
-          path: dist/
+          files: dist/most-sb-*.tar.gz dist/most-sb-*.zip
